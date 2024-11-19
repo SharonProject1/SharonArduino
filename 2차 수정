@@ -2,6 +2,7 @@
 // 구성 요소: DFPlayer, 28BYJ-48 모터, 스피커, ESP8266 WiFi 모듈, ESP-01 어댑터
 // 목표: HTTP GET 요청을 사용하여 Node.js 서버와 상호작용하고 activity codes를 따름
 
+#include "Arduino.h"
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
