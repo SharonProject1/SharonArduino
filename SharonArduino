@@ -5,6 +5,7 @@
 #include <DFRobotDFPlayerMini.h>
 #include <Stepper.h>
 #include <SoftwareSerial.h>
+#include <WIFIEsp.h>
 // WiFi 네트워크 설정
 const char* ssid = "Member@UOS";          // 연결할 WiFi SSID
 const char* password = "051025aA!";  // WiFi 비밀번호
