@@ -13,3 +13,9 @@ https://rasino.tistory.com/297
 
 http통신:https://bcho.tistory.com/1284
 eps01초기화법:https://bcho.tistory.com/1283
+
+해야할거
+1.wifi통신 성공하기 ------>제일 중요 무조건 중요
+2.서버와통신
+3.mp3모듈 작동
+4.모터 작동
