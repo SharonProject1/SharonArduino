@@ -74,11 +74,11 @@ void sendGetRequest() {
     }
   }
 
-  StaticJsonDocument<200> doc;
+  StaticJsonDocument<200> doc;      
   DeserializationError error = deserializeJson(doc, response);
   if (!error) {
     int value = doc["do"];  // "do" 키의 값을 가져옴
-    switch (value) {
+    switch (value) {          //여러 코드로 받을경우 생각
       case 1:
         Serial.println("1: 게임 시작 및 초기화 중...");
         break;
