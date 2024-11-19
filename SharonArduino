@@ -1,7 +1,10 @@
-#include <ESP8266WiFi.h>  // ESP8266 WiFi 라이브러리
-#include <ArduinoJson.h>  // JSON 파싱 라이브러리
-#include "SoftwareSerial.h"
-#include "DFRobotDFPlayerMini.h"
+#include "Arduino.h"
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ArduinoJson.h>
+#include <DFRobotDFPlayerMini.h>
+#include <Stepper.h>
+#include <SoftwareSerial.h>
 // WiFi 네트워크 설정
 const char* ssid = "SSID";          // 연결할 WiFi SSID
 const char* password = "PASSWORD";  // WiFi 비밀번호
