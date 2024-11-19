@@ -10,3 +10,5 @@ https://it-g-house.tistory.com/entry/%EC%95%84%EB%91%90%EC%9D%B4%EB%85%B8Arduino
 https://rasino.tistory.com/297
 
 연결법 https://blog.naver.com/darknisia/221571120344
+
+http통신:https://bcho.tistory.com/1284
