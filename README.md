@@ -12,6 +12,7 @@ https://rasino.tistory.com/297
 연결법 https://blog.naver.com/darknisia/221571120344
 
 http통신:https://bcho.tistory.com/1284
+
 eps01초기화법:https://bcho.tistory.com/1283
 
 해야할거
