@@ -8,7 +8,7 @@
 #include <WIFIEsp.h>
 // WiFi 네트워크 설정
 const char* ssid = "Member@UOS";          // 연결할 WiFi SSID
-const char* password = "051025aA!";  // WiFi 비밀번호
+const char* password = "";  // WiFi 비밀번호
 
 // 서버 정보 설정
 const char* host = "";  // Node.js 서버의 IP 주소
