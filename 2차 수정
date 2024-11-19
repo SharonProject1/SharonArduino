@@ -1,0 +1,169 @@
+// 아두이노 프로젝트 설정
+// 구성 요소: DFPlayer, 28BYJ-48 모터, 스피커, ESP8266 WiFi 모듈, ESP-01 어댑터
+// 목표: HTTP GET 요청을 사용하여 Node.js 서버와 상호작용하고 activity codes를 따름
+
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ArduinoJson.h>
+#include <DFRobotDFPlayerMini.h>
+#include <Stepper.h>
+#include <SoftwareSerial.h>
+
+// WiFi 자격 증명
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
+const char* server = "sharonproject.ddns.net";
+const int port = 8080;
+
+// 모터 설정
+#define STEPS 2048
+Stepper stepper(STEPS, D1, D3, D2, D4);
+
+// DFPlayer 설정
+SoftwareSerial mySerial(D5, D6); // RX, TX
+DFRobotDFPlayerMini myDFPlayer;
+
+// ESP8266 클라이언트
+WiFiClient client;
+
+void setup() {
+  Serial.begin(115200);
+  mySerial.begin(9600);
+
+  // 모터 설정
+  stepper.setSpeed(10);
+
+  // DFPlayer 설정
+  if (!myDFPlayer.begin(mySerial)) {
+    Serial.println("DFPlayer 초기화 실패!");
+    while (true);
+  }
+  Serial.println("DFPlayer Mini online.");
+  myDFPlayer.volume(4);  // 볼륨 설정 (0-30)
+
+  // WiFi 연결
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+  Serial.println("WiFi 연결됨");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  sendGetRequest();
+  delay(50);  // 50ms 주기로 요청 전송
+}
+
+void sendGetRequest() {
+  int retryCount = 0;
+  while (!client.connect(server, port) && retryCount < 5) {
+    Serial.println("Connection failed, retrying...");
+    delay(500);
+    retryCount++;
+  }
+  if (retryCount == 5) {
+    Serial.println("Connection failed after multiple attempts.");
+    return;
+  }
+
+  // GET 요청 작성 및 전송
+  String url = "/ard";  // Node.js 서버에서 처리할 엔드포인트 설정
+  Serial.print("Requesting URL: ");
+  Serial.println(url);
+
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + server + "\r\n" +
+               "Connection: close\r\n\r\n");
+
+  // 서버의 응답을 읽기
+  String response = "";
+  while (client.connected() || client.available()) {
+    if (client.available()) {
+      response = client.readStringUntil('\n');
+    }
+  }
+
+  StaticJsonDocument<200> doc;
+  DeserializationError error = deserializeJson(doc, response);
+  if (!error) {
+    int value = doc["do"];  // "do" 키의 값을 가져옴
+    executeActivity(value);
+  } else {
+    Serial.println("JSON 파싱 오류");
+  }
+
+  // 연결 종료
+  client.stop();
+  Serial.println("연결종료");
+}
+
+void executeActivity(int code) {
+  switch (code) {
+    case 0:
+      // 아무 행동 없음
+      break;
+    case 1:
+      // 게임 시작, 초기화 및 카운트다운
+      startGame();
+      break;
+    case 2:
+      // 음성 재생 시작
+      Serial.println("2: 음성 재생 시작");
+      myDFPlayer.playMp3Folder(2);  // "0002.mp3" 파일 재생
+      break;
+    case 3:
+      // 모터를 회전하여 벽을 바라봄
+      Serial.println("3: 모터 회전 (벽으로)");
+      stepper.step(STEPS);
+      break;
+    case 4:
+      // 모터를 회전하여 플레이어를 바라봄
+      Serial.println("4: 모터 회전 (사람으로)");
+      stepper.step(-STEPS);
+      break;
+    case 5:
+      // 제한 시간으로 인해 게임 종료
+      sendServerRequest("/endTimeout");
+      Serial.println("5: 게임 종료 (시간초과)");
+      break;
+    case 6:
+      // 플레이어가 한 명 남아 게임 종료
+      sendServerRequest("/endPlayerLeft");
+      Serial.println("6: 게임 종료 (생존자 1명)");
+      break;
+    default:
+      Serial.println("알 수 없는 명령입니다.");
+      break;
+  }
+}
+
+void sendServerRequest(const char* endpoint) {
+  if (client.connect(server, port)) {
+    client.print(String("GET ") + endpoint + " HTTP/1.1\r\n" +
+                 "Host: " + server + "\r\n" +
+                 "Connection: close\r\n\r\n");
+    client.stop();
+  }
+}
+
+void startGame() {
+  Serial.println("게임 시작 중...");
+  sendServerRequest("/start");
+}
+
+void endGameTimeout() {
+  Serial.println("제한 시간으로 인해 게임 종료.");
+  sendServerRequest("/endTimeout");
+}
+
+void endGamePlayerLeft() {
+  Serial.println("플레이어가 한 명 남아 게임 종료.");
+  sendServerRequest("/endPlayerLeft");
+}
