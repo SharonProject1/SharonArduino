@@ -1,0 +1,145 @@
+// 아두이노 프로젝트 설정
+// 구성 요소: DFPlayer, 28BYJ-48 모터, 스피커, ESP8266 WiFi 모듈, ESP-01 어댑터
+// 목표: HTTP GET 요청을 사용하여 Node.js 서버와 상호작용하고 activity codes를 따름
+
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <DFRobotDFPlayerMini.h>
+#include <Stepper.h>
+
+// WiFi 자격 증명
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
+const char* server = "sharonproject.ddns.net";
+const int port = 8080;
+
+// 모터 설정
+#define STEPS 2048
+Stepper stepper(STEPS, D1, D3, D2, D4);
+
+// DFPlayer 설정
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(D5, D6); // RX, TX
+DFRobotDFPlayerMini myDFPlayer;
+
+// ESP8266 클라이언트
+WiFiClient client;
+
+void setup() {
+  Serial.begin(9600);
+  mySerial.begin(9600);
+
+  // 모터 설정
+  stepper.setSpeed(10);
+
+  // DFPlayer 설정
+  if (!myDFPlayer.begin(mySerial)) {
+    Serial.println("DFPlayer 초기화 실패!");
+    while (true);
+  }
+  myDFPlayer.volume(20);
+
+  // WiFi 연결
+  WiFi.begin(ssid, password);
+  Serial.print("WiFi 연결 중");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("WiFi 연결됨");
+}
+
+void loop() {
+  if (WiFi.status() == WL_CONNECTED) {
+    // 서버에서 activity codes를 가져오기 위한 GET 요청 보내기
+    if (client.connect(server, port)) {
+      client.println("GET /ard HTTP/1.1");
+      client.println("Host: " + String(server));
+      client.println("Connection: close");
+      client.println();
+    }
+
+    // 서버 응답 대기
+    while (client.available()) {
+      String activityCode = client.readStringUntil('\n');
+      Serial.println("받은 activity code: " + activityCode);
+      int code = activityCode.toInt();
+      executeActivity(code);
+    }
+
+    client.stop();
+  }
+
+  delay(50); // 다음 요청 전 50ms 대기
+}
+
+void executeActivity(int code) {
+  switch (code) {
+    case 0:
+      // 아무 행동 없음
+      break;
+    case 1:
+      // 게임 시작, 초기화 및 카운트다운
+      startGame();
+      break;
+    case 2:
+      // 음성 재생 시작
+      myDFPlayer.play(1);
+      break;
+    case 3:
+      // 모터를 회전하여 벽을 바라봄
+      stepper.step(STEPS);
+      break;
+    case 4:
+      // 모터를 회전하여 플레이어를 바라봄
+      stepper.step(-STEPS);
+      break;
+    case 5:
+      // 제한 시간으로 인해 게임 종료
+      endGameTimeout();
+      break;
+    case 6:
+      // 플레이어가 한 명 남아 게임 종료
+      endGamePlayerLeft();
+      break;
+  }
+}
+
+void startGame() {
+  Serial.println("게임 시작 중...");
+  // 게임 초기화 및 카운트다운 로직 추가
+  // 서버에 게임 시작 알림 전송
+  if (client.connect(server, port)) {
+    client.println("GET /start HTTP/1.1");
+    client.println("Host: " + String(server));
+    client.println("Connection: close");
+    client.println();
+    client.stop();
+  }
+}
+
+void endGameTimeout() {
+  Serial.println("제한 시간으로 인해 게임 종료.");
+  // 게임 시간 초과 처리 로직 추가
+  // 서버에 게임 종료 알림 전송
+  if (client.connect(server, port)) {
+    client.println("GET /endTimeout HTTP/1.1");
+    client.println("Host: " + String(server));
+    client.println("Connection: close");
+    client.println();
+    client.stop();
+  }
+}
+
+void endGamePlayerLeft() {
+  Serial.println("플레이어가 한 명 남아 게임 종료.");
+  // 한 명의 플레이어만 남은 경우 처리 로직 추가
+  // 서버에 게임 종료 알림 전송
+  if (client.connect(server, port)) {
+    client.println("GET /endPlayerLeft HTTP/1.1");
+    client.println("Host: " + String(server));
+    client.println("Connection: close");
+    client.println();
+    client.stop();
+  }
+}
