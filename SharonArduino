@@ -83,26 +83,35 @@ void sendGetRequest() {
   DeserializationError error = deserializeJson(doc, response);
   if (!error) {
     int value = doc["do"];  // "do" 키의 값을 가져옴
-    switch (value) {          //여러 코드로 받을경우 생각
+    switch (value) {  //여러 코드로 받을경우 생각
+      case 0:
+        //그냥 하던거 계속하기
       case 1:
         Serial.println("1: 게임 시작 및 초기화 중...");
         break;
       case 2:
+        //서버에 어떤 음성파일을 재생해야 할지 물어보는 코드
         Serial.println("2: 음성 재생 시작");
         myDFPlayer.playMp3Folder(2);   // Play the file "0002.mp3"
         break;
       case 3:
+        //서버에 몇초 이동해야 하는지 물어보는 코드
         Serial.println("3: 모터 회전 (벽으로)");
         break;
       case 4:
+         //서버에 몇초 이동해야 하는지 물어보는 코드
         Serial.println("4: 모터 회전 (사람으로)");
         break;
       case 5:
         Serial.println("5: 게임 종료 (시간초과)");
+        //게임종료하는 함수 보내주기
         break;
       case 6:
         Serial.println("6: 게임 종료 (생존자 1명)");
+       //게임종료하는 함수 보내주기
         break;
+      case 24:
+      //서버에 어떤 음성파일을 재생하고 몇초동안 목이 돌아갈지 물어보는 코드
       default:
         Serial.println("알 수 없는 명령입니다.");
         break;
@@ -110,6 +119,7 @@ void sendGetRequest() {
   } else {
     Serial.println("JSON 파싱 오류");
   }
+
 
   // 연결 종료
   client.stop();
