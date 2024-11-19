@@ -20,7 +20,7 @@ const int port = 8080;
 Stepper stepper(STEPS, D1, D3, D2, D4);
 
 // DFPlayer 설정
-SoftwareSerial mySerial(D5, D6); // RX, TX
+SoftwareSerial mySerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 
 // ESP8266 클라이언트
