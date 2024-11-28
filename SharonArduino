@@ -96,11 +96,11 @@ void handleActivity(JsonDocument& doc) {
   String voiceCode = doc["voiceCode"].as<String>();
   float voiceSpeed = doc["voiceSpeed"].as<float>();
 
-  
+    Serial.print("docode is \n");
+    Serial.println(doCode);
     int rcode=0;
     if(doCode=="00"){
       rcode=0;
-      
     }
     else if(doCode=="010"){
       rcode=1;
@@ -126,8 +126,11 @@ void handleActivity(JsonDocument& doc) {
     else{
       rcode=404;
     }
+    Serial.print("rcode is \n");
+    Serial.print(rcode);
+    Serial.print("\n");
     switch (rcode) {
-      case '0':
+      case 0:
         Serial.println("아무 행동 없음");
         myDFPlayer.playMp3Folder(4);  //test
         delay(3000);  //test
