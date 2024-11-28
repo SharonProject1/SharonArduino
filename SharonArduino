@@ -6,9 +6,9 @@
 #include <Stepper.h>
 #include <DFRobotDFPlayerMini.h>
 
-const int stepsPerRevolution = 2048;
+int stepsPerRevolution = 2048;
 
-Stepper myStepper(stepsPerRevolution, 14, 2, 0, 4);
+//Stepper myStepper(stepsPerRevolution, 14, 2, 0, 4);
 
 SoftwareSerial mySerial(12,13); // mp3 RX, TX
 DFRobotDFPlayerMini myDFPlayer;
@@ -23,7 +23,7 @@ const int port = 5522;
 void setup() {
   
   Serial.begin(115200);
-  myStepper.setSpeed(10);
+  //myStepper.setSpeed(10);
   mySerial.begin(9600);
   if (!myDFPlayer.begin(mySerial)) {    
     Serial.println("DFPlayer communication failed!!!!!!");
@@ -133,6 +133,9 @@ void handleActivity(JsonDocument& doc) {
       case 0:
         Serial.println("아무 행동 없음");
         myDFPlayer.playMp3Folder(4);  //test
+        
+        
+
         delay(3000);  //test
         break;
       case 1:{
@@ -174,15 +177,8 @@ void handleActivity(JsonDocument& doc) {
 
       case 3:{
         Serial.println("모터를 회전하여 벽을 바라봄");
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
+        //myStepper.step(stepsPerRevolution);
+        
         delay(3000);
        
         break;
@@ -190,15 +186,8 @@ void handleActivity(JsonDocument& doc) {
       case 4:{
         Serial.println("모터를 회전하여 플레이어를 바라봄");
         
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
+        //myStepper.step(stepsPerRevolution);
+      
         delay(3000);
         break;
       }
@@ -240,7 +229,7 @@ void handleActivity(JsonDocument& doc) {
         http.begin(client, url); 
         http.GET();
         delay(1);
-        // 남은 플레이어가 없어서 게임 종료 로직 추가
+       
         break;
       }
       case 24:{
@@ -255,15 +244,8 @@ void handleActivity(JsonDocument& doc) {
         delay(1);
         
         
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
-        delay(1);
-        myStepper.step(stepsPerRevolution);
+        //myStepper.step(stepsPerRevolution);
+      
         delay(3000);
 
         snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
