@@ -6,15 +6,15 @@
 #include <Stepper.h>
 #include <DFRobotDFPlayerMini.h>
 
-const int stepsPerRevolution = 200;
+const int stepsPerRevolution = 2048;
 
 Stepper myStepper(stepsPerRevolution, 14, 2, 0, 4);
 
 SoftwareSerial mySerial(12,13); // mp3 RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 // WiFi 네트워크 설정
-const char* ssid = "Guest@UOS";          // 연결할 WiFi SSID
-const char* password = "";  // WiFi 비밀번호
+const char* ssid = ".";          // 연결할 WiFi SSID
+const char* password = "20051025";  // WiFi 비밀번호
 
 // 서버 정보 설정
 const char* host = "sharonproject.ddns.net";  // Node.js 서버의 IP 주소
@@ -23,7 +23,7 @@ const int port = 5522;
 void setup() {
   
   Serial.begin(115200);
-  myStepper.setSpeed(95);
+  myStepper.setSpeed(10);
   mySerial.begin(9600);
   if (!myDFPlayer.begin(mySerial)) {    
     Serial.println("DFPlayer communication failed!!!!!!");
@@ -97,14 +97,42 @@ void handleActivity(JsonDocument& doc) {
   float voiceSpeed = doc["voiceSpeed"].as<float>();
 
   
-    int code = doCode.toInt();
-    switch (code) {
+    int rcode=0;
+    if(doCode=="00"){
+      rcode=0;
+      
+    }
+    else if(doCode=="010"){
+      rcode=1;
+    }
+    else if(doCode=="020"){
+      rcode=2;
+    }
+    else if(doCode=="030"){
+      rcode=3;
+    }
+    else if(doCode=="040"){
+      rcode=4;
+    }
+    else if(doCode=="050"){
+      rcode=5;
+    }
+    else if(doCode=="060"){
+      rcode=6;
+    }
+    else if(doCode=="0240"){
+      rcode=24;
+    }
+    else{
+      rcode=404;
+    }
+    switch (rcode) {
       case '0':
         Serial.println("아무 행동 없음");
         myDFPlayer.playMp3Folder(4);  //test
         delay(3000);  //test
         break;
-      case '1':{
+      case 1:{
         WiFiClient client; 
         HTTPClient http;
         Serial.println("게임 시작: 초기화 및 카운트다운 진행");
@@ -122,7 +150,7 @@ void handleActivity(JsonDocument& doc) {
         delay(1);
         break;
       }
-      case '2':{
+      case 2:{
         WiFiClient client; 
         HTTPClient http;
         Serial.println("음성재생");
@@ -141,7 +169,7 @@ void handleActivity(JsonDocument& doc) {
         break;
       }
 
-      case '3':{
+      case 3:{
         Serial.println("모터를 회전하여 벽을 바라봄");
         myStepper.step(stepsPerRevolution);
         delay(1);
@@ -156,7 +184,7 @@ void handleActivity(JsonDocument& doc) {
        
         break;
       }
-      case '4':{
+      case 4:{
         Serial.println("모터를 회전하여 플레이어를 바라봄");
         
         myStepper.step(stepsPerRevolution);
@@ -171,7 +199,7 @@ void handleActivity(JsonDocument& doc) {
         delay(3000);
         break;
       }
-      case '5':{
+      case 5:{
         Serial.println("제한 시간으로 인해 게임 종료");
         WiFiClient client; 
         HTTPClient http;
@@ -191,7 +219,7 @@ void handleActivity(JsonDocument& doc) {
         delay(1);
         break;
       }
-      case '6':{
+      case 6:{
         Serial.println("남은 플레이어가 없어 게임 종료");
         WiFiClient client; 
         HTTPClient http;
@@ -212,7 +240,7 @@ void handleActivity(JsonDocument& doc) {
         // 남은 플레이어가 없어서 게임 종료 로직 추가
         break;
       }
-      case '024':{
+      case 24:{
         WiFiClient client; 
         HTTPClient http;
         Serial.println("음악재생,인형 플레이어를 바라봄");
