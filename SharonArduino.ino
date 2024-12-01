@@ -229,25 +229,33 @@ void handleActivity(JsonDocument& doc) {
         delay(650);
 
         Serial.println("음성재생");
-        myDFPlayer.playMp3Folder(rvcode);  
+        
 
+        
+        Serial.println("요청전송");
         char url[100];
+        Serial.println("요청전송1");
         snprintf(url, sizeof(url), "http://%s:%d/ardIsVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
-
+        Serial.println("요청전송2");
+        http.begin(client, url);
+        Serial.println("요청전송3");
+        int httpCode1 = http.GET(); // GET 요청 전송
+        myDFPlayer.playMp3Folder(rvcode);
+        Serial.println("전송완료");
+        Serial.println(httpCode1);
         Serial.println(rvcode);
         Serial.println("\n");
         Serial.println(time);
 
-        //delay(time);
+        delay(time);
         myservo.write(0);
-        //delay(650);
-
+        delay(650);
+        Serial.println("요청전송");
         snprintf(url, sizeof(url), "http://%s:%d/ardIsNotVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
-        Serial.println("플레이어 바라봄");
+        http.begin(client, url);
+        int httpCode2 = http.GET(); // GET 요청 전송
+        Serial.println("플레이어 바라 봄");
+        Serial.println(httpCode2);
 
         break;
 
