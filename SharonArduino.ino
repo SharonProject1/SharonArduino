@@ -145,15 +145,15 @@ void handleActivity(JsonDocument& doc) {
 
         myDFPlayer.playMp3Folder(24);
 
-        char url[100];
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
-        http.begin(client, url);
-        http.GET();
+        //char url[100];
+        //snprintf(url, sizeof(url), "http://%s:%d/ardIsVoicing", host, port);
+        //http.begin(client, url);
+        //http.GET();
         
         delay(4000);
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
+       // snprintf(url, sizeof(url), "http://%s:%d/ardIsNotVoicing", host, port);
+       // http.begin(client, url); 
+       // http.GET();
         break;
       }
       case 2:{
@@ -232,7 +232,7 @@ void handleActivity(JsonDocument& doc) {
         myDFPlayer.playMp3Folder(rvcode);  
 
         char url[100];
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
+        snprintf(url, sizeof(url), "http://%s:%d/ardIsVoicing", host, port);
         http.begin(client, url); 
         http.GET();
 
@@ -240,11 +240,11 @@ void handleActivity(JsonDocument& doc) {
         Serial.println("\n");
         Serial.println(time);
 
-        delay(time);
+        //delay(time);
         myservo.write(0);
-        delay(650);
+        //delay(650);
 
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
+        snprintf(url, sizeof(url), "http://%s:%d/ardIsNotVoicing", host, port);
         http.begin(client, url); 
         http.GET();
         Serial.println("플레이어 바라봄");
@@ -333,17 +333,17 @@ void handleActivity(JsonDocument& doc) {
         WiFiClient client; 
         HTTPClient http;
 
-        char url[100];
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
+        //char url[100];
+        //snprintf(url, sizeof(url), "http://%s:%d/ardIsVoicing", host, port);
+        //http.begin(client, url); 
+        //http.GET();
         
         myDFPlayer.playMp3Folder(5);  
        
         delay(3000);
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
+        //snprintf(url, sizeof(url), "http://%s:%d/ardIsNotVoicing", host, port);
+       // http.begin(client, url); 
+        //http.GET();
         break;
       }
       case 6:{
@@ -351,17 +351,17 @@ void handleActivity(JsonDocument& doc) {
         WiFiClient client; 
         HTTPClient http;
         
-        char url[100];
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
+        //char url[100];
+        //snprintf(url, sizeof(url), "http://%s:%d/ardIsVoicing", host, port);
+        //http.begin(client, url); 
+        //http.GET();
 
         myDFPlayer.playMp3Folder(6);  
         
         delay(2000);
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
+        //snprintf(url, sizeof(url), "http://%s:%d/ardIsNotVoicing", host, port);
+        //http.begin(client, url); 
+        //http.GET();
         break;
       }
       default:{
