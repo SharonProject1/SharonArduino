@@ -77,6 +77,7 @@ void sendGetRequest() {
         handleActivity(doc);
       } else {
         Serial.println("Failed to parse JSON");
+        Serial.println("A.M.I");
       }
     } else {
       Serial.print("Error on HTTP request: ");
