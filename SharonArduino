@@ -223,7 +223,7 @@ void handleActivity(JsonDocument& doc) {
         rvcode=23;
         time=(1500-650);
       }
-      //벽을 바라봄
+      
         Serial.println("벽바라봄");
         myservo.write(180);  
         delay(650);
@@ -337,7 +337,6 @@ void handleActivity(JsonDocument& doc) {
         snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
         http.begin(client, url); 
         http.GET();
-        delay(1);
         
         myDFPlayer.playMp3Folder(5);  
        
@@ -345,7 +344,6 @@ void handleActivity(JsonDocument& doc) {
         snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
         http.begin(client, url); 
         http.GET();
-        delay(1);
         break;
       }
       case 6:{
@@ -357,7 +355,6 @@ void handleActivity(JsonDocument& doc) {
         snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
         http.begin(client, url); 
         http.GET();
-        delay(1);
 
         myDFPlayer.playMp3Folder(6);  
         
@@ -365,90 +362,6 @@ void handleActivity(JsonDocument& doc) {
         snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
         http.begin(client, url); 
         http.GET();
-        delay(1);
-        break;
-      }
-
-      case 24:{
-        WiFiClient client; 
-        HTTPClient http;
-        if(voiceCode=="8"){
-        rvcode=8;
-        time=6000;
-      }
-      else if(voiceCode=="9"){
-        rvcode=9;
-        time=5000;
-      }
-      else if(voiceCode=="10"){
-        rvcode=10;
-        time=4285;
-      }
-      else if(voiceCode=="11"){
-        rvcode=11;
-        time=3750;
-      }
-      else if(voiceCode=="12"){
-        rvcode=12;
-        time=3333;
-      }
-      else if(voiceCode=="13"){
-        rvcode=12;
-        time=3000;
-      }
-      else if(voiceCode=="14"){
-        rvcode=14;
-        time=2727;
-      }
-      else if(voiceCode=="15"){
-        rvcode=15;
-        time=2500;
-      }
-      else if(voiceCode=="16"){
-        rvcode=16;
-        time=2307;
-      }
-      else if(voiceCode=="17"){
-        rvcode=17;
-        time=2142;
-      }
-      else if(voiceCode=="18"){
-        rvcode=18;
-        time=2000;
-      }
-      else if(voiceCode=="19"){
-        rvcode=19;
-        time=1875;
-      }
-      else if(voiceCode=="20"){
-        rvcode=20;
-        time=1764;
-      }
-      else if(voiceCode=="21"){
-        rvcode=21;
-        time=1666;
-      }
-      else if(voiceCode=="22"){
-        rvcode=22;
-        time=1578;
-      }
-      else{
-        rvcode=23;
-        time=1500;
-      }
-        Serial.println("음악재생,인형 플레이어를 바라봄");
-        char url[100];
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
-        myDFPlayer.playMp3Folder(rvcode);  
-        delay(time);
-        myservo.write(0);   
-        delay(1);
-        snprintf(url, sizeof(url), "http://%s:%d//ardIsNotVoicing", host, port);
-        http.begin(client, url); 
-        http.GET();
-        delay(1);
         break;
       }
       default:{
