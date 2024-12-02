@@ -31,6 +31,8 @@ http통신:https://bcho.tistory.com/1284
 
 eps01초기화법:https://bcho.tistory.com/1283
 
+https://youtube.com/playlist?list=PLhX245sXp9uumS9mOvogtvsX5RFVzPw9Q&si=hR1oNPE9y5Amlwmi
+
 해야할거
 
  1.wifi통신 성공하기 ------>제일 중요 무조건 중요
