@@ -1,4 +1,6 @@
-관련 문의사항:sjseo20051025@gmail.com
+코드에 관하여 궁금하신 부분 혹은기타 문의사항이있으시다면,
+sjseo20051025@gmail.com로 문의주세요.
+
 # SharonArduino
 SharonArduino
 
@@ -14,7 +16,7 @@ SharonArduino
 모터구현 (성공)
 
 11/17-11/23
-서버통신
+서버통신->esp8266 모뎀 펌워어업데이트 실패
 
 와이파이 통신 https://blog.naver.com/yuyyulee/220515735024
 
@@ -42,10 +44,13 @@ https://youtube.com/playlist?list=PLhX245sXp9uumS9mOvogtvsX5RFVzPw9Q&si=hR1oNPE9
  2.서버와통신
  
  
-보드교체후 성공
+결국 보드교체후 성공
 
 11/24~12/1 
-각 코드 총합 후최종결과물 만들기(성공)
+각 코드 종합 후 최종결과물 만들기(성공)
+시간이 남아, 디자인부분까지 수행 (성공)
 
 12/2
 아두이노 최종보고서 작성(성공)
+
+
